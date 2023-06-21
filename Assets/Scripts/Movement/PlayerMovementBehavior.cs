@@ -15,7 +15,7 @@ public class PlayerMovementBehavior : MonoBehaviour
 
     [Tooltip("The amount of times the player can dash while in the air.")]
     [SerializeField]
-    private int _dashes = 1;
+    private int _maxDashes = 1, _dashes;
 
     [Tooltip("The rigidbody attached to the player.")]
     private Rigidbody _rigidbody;
@@ -26,6 +26,7 @@ public class PlayerMovementBehavior : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _dashes = _maxDashes;
     }
 
     // Update is called once per frame
@@ -40,6 +41,11 @@ public class PlayerMovementBehavior : MonoBehaviour
             _rigidbody.velocity += Vector3.up * _jumpForce;
             _isOnGround = false;
         }
+        else if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !_isOnGround && _dashes > 0)
+        {
+            _rigidbody.AddForce(Vector3.forward * 75, ForceMode.Impulse);
+            _dashes--;
+        }
 
         // If the player's velocity on the z is greater than the max speed, set it to the max speed.
         if(_rigidbody.velocity.z > _maxSpeed)
@@ -48,13 +54,33 @@ public class PlayerMovementBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // If the other is a floor, set _isOnGround to true.
         if (other.gameObject.CompareTag("Floor"))
+        {
             _isOnGround = true;
+
+            // Resets the number of dashes the player can do.
+            _dashes = _maxDashes;
+        }
+            
+        // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
         else if (other.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("Should Get Hit");
             _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
             _rigidbody.AddForce(Vector3.back * 75, ForceMode.Impulse);
+
+            ToggleCollider();
+            RoutineBehavior.Instance.StartNewTimedAction(arguments => ToggleCollider(), TimedActionCountType.SCALEDTIME, 0.2f);
         }
+    }
+
+    private void ToggleCollider()
+    {
+        SphereCollider collider = GetComponent<SphereCollider>();
+
+        if (collider.enabled)
+            collider.enabled = false;
+        else 
+            collider.enabled = true;
     }
 }
