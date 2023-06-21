@@ -50,5 +50,11 @@ public class PlayerMovementBehavior : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Floor"))
             _isOnGround = true;
+        else if (other.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Should Get Hit");
+            _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
+            _rigidbody.AddForce(Vector3.back * 75, ForceMode.Impulse);
+        }
     }
 }
