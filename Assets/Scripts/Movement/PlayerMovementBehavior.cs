@@ -66,14 +66,23 @@ public class PlayerMovementBehavior : MonoBehaviour
         // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
         else if (other.gameObject.CompareTag("Obstacle"))
         {
+            // Don't allow the player to jump or dash after hitting an obstacle.
+            _isOnGround = false;
+            _dashes = 0;
+
+            // Reset the velocity on the z-axis, and then send the player back.
             _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
             _rigidbody.AddForce(Vector3.back * 75, ForceMode.Impulse);
 
+            // Turn the collider off for a fraction of a second, and then turn it back on.
             ToggleCollider();
             RoutineBehavior.Instance.StartNewTimedAction(arguments => ToggleCollider(), TimedActionCountType.SCALEDTIME, 0.2f);
         }
     }
 
+    /// <summary>
+    /// Checks to see if the collider of this object is turned on or off, and then switches it.
+    /// </summary>
     private void ToggleCollider()
     {
         SphereCollider collider = GetComponent<SphereCollider>();
