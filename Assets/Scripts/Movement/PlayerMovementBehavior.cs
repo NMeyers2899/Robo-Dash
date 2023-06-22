@@ -23,6 +23,9 @@ public class PlayerMovementBehavior : MonoBehaviour
     [Tooltip("Lets the player know whether or not its on the ground.")]
     private bool _isOnGround = false;
 
+    [Tooltip("Determines whether or not the player should be hit by obstacles.")]
+    private bool _shouldBeHit = true;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -64,10 +67,9 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
             
         // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
-        else if (other.gameObject.CompareTag("Obstacle"))
+        else if (other.gameObject.CompareTag("Obstacle") && _shouldBeHit)
         {
             // Don't allow the player to jump or dash after hitting an obstacle.
-            _isOnGround = false;
             _dashes = 0;
 
             // Reset the velocity on the z-axis, and then send the player back.
@@ -75,21 +77,15 @@ public class PlayerMovementBehavior : MonoBehaviour
             _rigidbody.AddForce(Vector3.back * 75, ForceMode.Impulse);
 
             // Turn the collider off for a fraction of a second, and then turn it back on.
-            ToggleCollider();
-            RoutineBehavior.Instance.StartNewTimedAction(arguments => ToggleCollider(), TimedActionCountType.SCALEDTIME, 0.2f);
+            _shouldBeHit = false;
+            RoutineBehavior.Instance.StartNewTimedAction(arguments => _shouldBeHit = true, TimedActionCountType.SCALEDTIME, 0.2f);
         }
     }
 
-    /// <summary>
-    /// Checks to see if the collider of this object is turned on or off, and then switches it.
-    /// </summary>
-    private void ToggleCollider()
+    private void OnTriggerExit(Collider other)
     {
-        SphereCollider collider = GetComponent<SphereCollider>();
-
-        if (collider.enabled)
-            collider.enabled = false;
-        else 
-            collider.enabled = true;
+        // If the other is a floor, set _isOnGround to false.
+        if (other.gameObject.CompareTag("Floor"))
+            _isOnGround = false;
     }
 }
