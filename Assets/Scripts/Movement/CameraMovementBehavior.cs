@@ -12,6 +12,11 @@ public class CameraMovementBehavior : MonoBehaviour
     [SerializeField]
     private float _dampeningHeight;
 
+    /// <summary>
+    /// How high the subject must be before the camera begins to follow it upwards.
+    /// </summary>
+    public float DampeningHeight { get { return _dampeningHeight;}  set { _dampeningHeight = value; } }
+
     // Update is called once per frame
     void Update()
     {
@@ -20,6 +25,6 @@ public class CameraMovementBehavior : MonoBehaviour
         if(subjectPosition.y < _dampeningHeight)
             transform.position = new Vector3(subjectPosition.x + 6, _dampeningHeight, subjectPosition.z + 2.5f);
         else
-            transform.position = new Vector3(subjectPosition.x + 6, subjectPosition.y, subjectPosition.z + 2.5f);
+            transform.position = new Vector3(subjectPosition.x + 6, subjectPosition.y + _dampeningHeight, subjectPosition.z + 2.5f);
     }       
 }

@@ -26,6 +26,10 @@ public class PlayerMovementBehavior : MonoBehaviour
     [Tooltip("Determines whether or not the player should be hit by obstacles.")]
     private bool _shouldBeHit = true;
 
+    [Tooltip("The camera that is following the player.")]
+    [SerializeField]
+    private CameraMovementBehavior _camera;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -44,9 +48,10 @@ public class PlayerMovementBehavior : MonoBehaviour
             _rigidbody.velocity += Vector3.up * _jumpForce;
             _isOnGround = false;
         }
+        // If the player presses the given key or left click, if they are off the ground, and have at least one dash left, push them forward.
         else if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !_isOnGround && _dashes > 0)
         {
-            _rigidbody.AddForce(Vector3.forward * 75, ForceMode.Impulse);
+            _rigidbody.AddForce(Vector3.forward * 50, ForceMode.Impulse);
             _dashes--;
         }
 
@@ -64,6 +69,8 @@ public class PlayerMovementBehavior : MonoBehaviour
 
             // Resets the number of dashes the player can do.
             _dashes = _maxDashes;
+
+            _camera.DampeningHeight = transform.position.y + 1.5f;
         }
             
         // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
@@ -75,6 +82,7 @@ public class PlayerMovementBehavior : MonoBehaviour
             // Reset the velocity on the z-axis, and then send the player back.
             _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
             _rigidbody.AddForce(Vector3.back * 75, ForceMode.Impulse);
+            RoutineBehavior.Instance.StartNewTimedAction(arguments => _rigidbody.AddForce(Vector3.forward * 72, ForceMode.Impulse), TimedActionCountType.SCALEDTIME, 0.1f);
 
             // Turn the collider off for a fraction of a second, and then turn it back on.
             _shouldBeHit = false;

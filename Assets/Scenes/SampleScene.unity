@@ -626,6 +626,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2686404801924256351, guid: 0bbb31ba14e9d7f4083199b645efc0b7, type: 3}
+      propertyPath: _speed
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2686404801924256351, guid: 0bbb31ba14e9d7f4083199b645efc0b7, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 688419157}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bbb31ba14e9d7f4083199b645efc0b7, type: 3}
 --- !u!1001 &9186369738506747947
