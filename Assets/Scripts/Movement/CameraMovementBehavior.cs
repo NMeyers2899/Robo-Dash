@@ -18,7 +18,7 @@ public class CameraMovementBehavior : MonoBehaviour
     void Update()
     {
         Vector3 subjectPosition = _subject.transform.position;
-        if(((subjectPosition.y + 1.5f) - subjectPosition.y) < _dampeningHeight)
+        if(((subjectPosition.y + 1f) - subjectPosition.y) < _dampeningHeight)
             transform.position = new Vector3(subjectPosition.x + 6, 1.5f, subjectPosition.z + 2.5f);
         else
             transform.position = new Vector3(subjectPosition.x + 6, subjectPosition.y - _dampeningHeight, subjectPosition.z + 2.5f);
