@@ -26,10 +26,6 @@ public class PlayerMovementBehavior : MonoBehaviour
     [Tooltip("Determines whether or not the player should be hit by obstacles.")]
     private bool _shouldBeHit = true;
 
-    [Tooltip("The camera that is following the player.")]
-    [SerializeField]
-    private CameraMovementBehavior _camera;
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -69,8 +65,6 @@ public class PlayerMovementBehavior : MonoBehaviour
 
             // Resets the number of dashes the player can do.
             _dashes = _maxDashes;
-
-            _camera.DampeningHeight = transform.position.y + 1.5f;
         }
             
         // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
