@@ -26,10 +26,19 @@ public class PlayerMovementBehavior : MonoBehaviour
     [Tooltip("Determines whether or not the player should be hit by obstacles.")]
     private bool _shouldBeHit = true;
 
+    [Tooltip("The starting position of the player.")]
+    private Vector3 _basePosition;
+
     private void Awake()
-    {
+    {  
+        // Gets access to the actor's rigidbody.
         _rigidbody = GetComponent<Rigidbody>();
+
+        // Sets the current number of dashes to the max number.
         _dashes = _maxDashes;
+
+        // Sets the base position to the player's starting position.
+        _basePosition = transform.position;
     }
 
     // Update is called once per frame
@@ -45,14 +54,14 @@ public class PlayerMovementBehavior : MonoBehaviour
             _isOnGround = false;
         }
         // If the player presses the given key or left click, if they are off the ground, and have at least one dash left, push them forward.
-        else if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !_isOnGround && _dashes > 0)
+        else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !_isOnGround && _dashes > 0)
         {
             _rigidbody.AddForce(Vector3.forward * 50, ForceMode.Impulse);
             _dashes--;
         }
 
         // If the player's velocity on the z is greater than the max speed, set it to the max speed.
-        if(_rigidbody.velocity.z > _maxSpeed)
+        if (_rigidbody.velocity.z > _maxSpeed)
             _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, _maxSpeed);
     }
 
@@ -66,7 +75,7 @@ public class PlayerMovementBehavior : MonoBehaviour
             // Resets the number of dashes the player can do.
             _dashes = _maxDashes;
         }
-            
+
         // If the other is an obstacle, remove the player's velocity on the z and send them backwards.
         else if (other.gameObject.CompareTag("Obstacle") && _shouldBeHit)
         {
@@ -89,5 +98,13 @@ public class PlayerMovementBehavior : MonoBehaviour
         // If the other is a floor, set _isOnGround to false.
         if (other.gameObject.CompareTag("Floor"))
             _isOnGround = false;
+    }
+
+    /// <summary>
+    /// Resets the player character to their base position.
+    /// </summary>
+    public void ResetPosition()
+    {
+        transform.position = _basePosition;
     }
 }

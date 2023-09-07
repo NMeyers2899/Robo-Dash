@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class GameManagerBehavior : MonoBehaviour
 {
-    public delegate LevelBehavior ChangeLevel();
+    [Tooltip("The actor that the player controls.")]
+    [SerializeField]
+    private PlayerMovementBehavior player;
 
+    [Tooltip("The list of levels in the game.")]
     [SerializeField]
     private LevelBehavior[] _levels;
 }
