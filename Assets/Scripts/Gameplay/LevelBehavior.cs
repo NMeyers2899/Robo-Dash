@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class LevelBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Tooltip("The level that comes after this one.")]
+    [SerializeField]
+    private LevelBehavior _nextLevel;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    /// <summary>
+    /// The level that comes after this one.
+    /// </summary>
+    public LevelBehavior NextLevel { get { return _nextLevel; }  set { _nextLevel = value; } }
 }
