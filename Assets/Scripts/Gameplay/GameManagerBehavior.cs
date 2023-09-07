@@ -19,4 +19,14 @@ public class GameManagerBehavior : MonoBehaviour
     /// The timer meant to see how fast the player completes a level.
     /// </summary>
     public float Timer { get { return _timer; } }
+
+    private void Awake()
+    {
+        // For each element of the levels array, set the next level to the next element of the array. Unless it is the last element.
+        for(int i = 0; i < _levels.Length; i++)
+        {
+            if(i != _levels.Length)
+                _levels[i].NextLevel = _levels[i + 1]; 
+        }
+    }
 }
