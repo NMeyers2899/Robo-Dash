@@ -23,10 +23,10 @@ public class GameManagerBehavior : MonoBehaviour
     private void Awake()
     {
         // For each element of the levels array, set the next level to the next element of the array. Unless it is the last element.
-        for(int i = 0; i < _levels.Length; i++)
+        for(int i = 0; i < _levels.Length - 1; i++)
         {
             if(i != _levels.Length)
                 _levels[i].NextLevel = _levels[i + 1]; 
-        }
+        } 
     }
 }

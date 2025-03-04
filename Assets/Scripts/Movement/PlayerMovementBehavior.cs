@@ -47,6 +47,10 @@ public class PlayerMovementBehavior : MonoBehaviour
         // Adds a force to the player's z-axis.
         _rigidbody.velocity += Vector3.forward * _speed;
 
+        // If the player's velocity on the z is greater than the max speed, set it to the max speed.
+        if (_rigidbody.velocity.z > _maxSpeed)
+            _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, _maxSpeed);
+
         // If the player presses the given key or left click, and if they are on the ground, they jump.
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && _isOnGround)
         {
@@ -59,10 +63,6 @@ public class PlayerMovementBehavior : MonoBehaviour
             _rigidbody.AddForce(Vector3.forward * 50, ForceMode.Impulse);
             _dashes--;
         }
-
-        // If the player's velocity on the z is greater than the max speed, set it to the max speed.
-        if (_rigidbody.velocity.z > _maxSpeed)
-            _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, _maxSpeed);
     }
 
     private void OnTriggerEnter(Collider other)
